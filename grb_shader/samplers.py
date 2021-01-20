@@ -4,6 +4,9 @@ import numpy as np
 import popsynth as ps
 from popsynth.selection_probability import SpatialSelection, UnitySelection
 from tqdm.auto import tqdm
+import ligo.skymap.plot
+from matplotlib import pyplot as plt
+from matplotlib.patches import Ellipse
 
 from .catalog import Galaxy, LocalVolume
 
@@ -81,10 +84,6 @@ class CatalogSelector(SpatialSelection):
 
     def show_selected_galaxies(self):
 
-        import ligo.skymap.plot
-        from matplotlib import pyplot as plt
-        from matplotlib.patches import Ellipse
-
         fig, ax = plt.subplots(subplot_kw={"projection": "astro degrees mollweide"})
         fig.set_size_inches((7, 5))
 
@@ -100,13 +99,10 @@ class CatalogSelector(SpatialSelection):
             colors,
         ):
 
-            a = galaxy.radius * (1 / 60)
-            b = a * galaxy.ratio
-
             ellipse = Ellipse(
                 (galaxy.center.ra.deg, galaxy.center.dec.deg),
-                a,
-                b,
+                galaxy.a * 2,
+                galaxy.b * 2,
                 galaxy.angle,
                 alpha=0.5,
                 color=color,
@@ -129,10 +125,6 @@ class CatalogSelector(SpatialSelection):
 
     def show_all_galaxies(self):
 
-        import ligo.skymap.plot
-        from matplotlib import pyplot as plt
-        from matplotlib.patches import Ellipse
-
         fig, ax = plt.subplots(subplot_kw={"projection": "astro degrees mollweide"})
         fig.set_size_inches((7, 5))
 
@@ -141,13 +133,10 @@ class CatalogSelector(SpatialSelection):
 
         for _, galaxy in self._catalog.galaxies.items():
 
-            a = galaxy.radius * (1 / 60)
-            b = a * galaxy.ratio
-
             ellipse = Ellipse(
                 (galaxy.center.ra.deg, galaxy.center.dec.deg),
-                a,
-                b,
+                galaxy.b * 2,
+                galaxy.a * 2,
                 galaxy.angle,
                 alpha=0.5,
                 label=galaxy.name,
