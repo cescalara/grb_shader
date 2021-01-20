@@ -101,8 +101,8 @@ class CatalogSelector(SpatialSelection):
 
             ellipse = Ellipse(
                 (galaxy.center.ra.deg, galaxy.center.dec.deg),
-                galaxy.a * 2,
-                galaxy.b * 2,
+                galaxy.a,
+                galaxy.b,
                 galaxy.angle,
                 alpha=0.5,
                 color=color,
@@ -135,8 +135,8 @@ class CatalogSelector(SpatialSelection):
 
             ellipse = Ellipse(
                 (galaxy.center.ra.deg, galaxy.center.dec.deg),
-                galaxy.b * 2,
-                galaxy.a * 2,
+                galaxy.b,
+                galaxy.a,
                 galaxy.angle,
                 alpha=0.5,
                 label=galaxy.name,

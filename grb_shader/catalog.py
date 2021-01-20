@@ -25,7 +25,7 @@ class Galaxy(object):
 
         # Some useful ellipse properties
 
-        self.a = self.radius * (1 / 60)  # deg
+        self.a = self.radius / 60  # deg
 
         self.b = self.a * self.ratio  # deg
 
@@ -53,7 +53,7 @@ class Galaxy(object):
         y_t = x * sin_angle + y * cos_angle
 
         # Get normalised distance of point to center
-        r_norm = x_t ** 2 / self.a ** 2 + y_t ** 2 / self.b ** 2
+        r_norm = x_t ** 2 / (self.a / 2) ** 2 + y_t ** 2 / (self.b / 2) ** 2
 
         if r_norm <= 1:
 
