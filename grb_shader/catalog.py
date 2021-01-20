@@ -21,6 +21,16 @@ class Galaxy(object):
     ratio: float
     angle: float = 0
 
+    def __post_init__(self):
+
+        # Some useful ellipse properties
+
+        self.a = self.radius * (1 / 60)  # deg
+
+        self.b = self.a * self.ratio  # deg
+
+        self.area = np.pi * np.deg2rad(self.a) * np.deg2rad(self.b)  # rad
+
     def contains_point(self, ra: float, dec: float) -> bool:
         """
         does this galaxy contain this point?
@@ -30,10 +40,6 @@ class Galaxy(object):
         :param ra:
         :param dec:
         """
-
-        a = self.radius * (1 / 60)  # deg
-
-        b = a * self.ratio  # deg
 
         cos_angle = np.cos(np.pi - np.deg2rad(self.angle))
         sin_angle = np.sin(np.pi - np.deg2rad(self.angle))
@@ -47,7 +53,7 @@ class Galaxy(object):
         y_t = x * sin_angle + y * cos_angle
 
         # Get normalised distance of point to center
-        r_norm = x_t ** 2 / (a / 2) ** 2 + y_t ** 2 / (b / 2) ** 2
+        r_norm = x_t ** 2 / (self.a / 2) ** 2 + y_t ** 2 / (self.b / 2) ** 2
 
         if r_norm <= 1:
 
@@ -123,6 +129,20 @@ class LocalVolume(object):
         else:
 
             return False, None
+
+    def percentage_sky_cover(self):
+
+        total_area = 0
+
+        for name, galaxy in self.galaxies.items():
+
+            if not np.isnan(galaxy.area):
+
+                total_area += galaxy.area
+
+        fraction_sky_cover = total_area / (4 * np.pi)
+
+        return fraction_sky_cover * 100
 
     def __dir__(self):
         # Get the names of the attributes of the class
